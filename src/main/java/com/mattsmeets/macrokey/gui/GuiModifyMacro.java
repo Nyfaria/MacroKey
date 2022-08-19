@@ -11,7 +11,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
@@ -41,7 +41,7 @@ public class GuiModifyMacro extends Screen {
     private boolean changingKey = false;
 
     public GuiModifyMacro(final Screen parentScreen, final MacroInterface macro) {
-        super(new TextComponent("Test"));
+        super(Component.literal("Test"));
 
         this.parentScreen = parentScreen;
         this.isUpdatingMacro = macro != null;
@@ -57,7 +57,7 @@ public class GuiModifyMacro extends Screen {
         super.init();
 
         // Add macro button
-        this.addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, new TextComponent(saveButtonText), Button::onPress) {
+        this.addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, Component.literal(saveButtonText), Button::onPress) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 if (textFieldCommand.getValue().length() <= 1) {
@@ -77,7 +77,7 @@ public class GuiModifyMacro extends Screen {
         });
 
         // Cancel button
-        this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, new TextComponent(cancelText), Button::onPress) {
+        this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, Component.literal(cancelText), Button::onPress) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 Minecraft.getInstance().setScreen(parentScreen);
@@ -90,7 +90,7 @@ public class GuiModifyMacro extends Screen {
         }
 
         // Modify key binding button
-        this.btnKeyBinding = this.addRenderableWidget(new KeyBindingButton(this.width / 2 - 75, 100, 150, 20, new TextComponent(buttonName), Button::onPress) {
+        this.btnKeyBinding = this.addRenderableWidget(new KeyBindingButton(this.width / 2 - 75, 100, 150, 20, Component.literal(buttonName), Button::onPress) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 changingKey = true;
@@ -100,27 +100,27 @@ public class GuiModifyMacro extends Screen {
         this.btnKeyBinding.updateDisplayString(this.macro, false);
 
         // Toggle macro repeat button
-        this.addRenderableWidget(new Button(this.width / 2 - 75, 140, 75, 20, new TextComponent(macro.willRepeat() ? enabledText : disabledText), Button::onPress) {
+        this.addRenderableWidget(new Button(this.width / 2 - 75, 140, 75, 20, Component.literal(macro.willRepeat() ? enabledText : disabledText), Button::onPress) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 macro.setRepeat(!macro.willRepeat());
 
-                this.setMessage(new TextComponent(macro.willRepeat() ? enabledText : disabledText));
+                this.setMessage(Component.literal(macro.willRepeat() ? enabledText : disabledText));
             }
         });
 
         // Toggle macro active button
-        this.addRenderableWidget(new Button(this.width / 2 - 75, 163, 75, 20, new TextComponent(macro.isActive() ? enabledText : disabledText), Button::onPress) {
+        this.addRenderableWidget(new Button(this.width / 2 - 75, 163, 75, 20, Component.literal(macro.isActive() ? enabledText : disabledText), Button::onPress) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 macro.setActive(!macro.isActive());
 
-                this.setMessage(new TextComponent(macro.isActive() ? enabledText : disabledText));
+                this.setMessage(Component.literal(macro.isActive() ? enabledText : disabledText));
             }
         });
 
         // Command text field
-        this.textFieldCommand = new EditBox(this.font, this.width / 2 - 100, 50, 200, 20, new TextComponent("test"));
+        this.textFieldCommand = new EditBox(this.font, this.width / 2 - 100, 50, 200, 20, Component.literal("test"));
         this.textFieldCommand.setFocus(true);
         this.textFieldCommand.setMaxLength(Integer.MAX_VALUE);
         this.textFieldCommand.setValue(this.isUpdatingMacro ? macro.getCommand().toString() : StringUtils.EMPTY);

@@ -28,7 +28,7 @@ public class KeyInputHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public void onKeyInputEvent(InputEvent.KeyInputEvent event) throws IOException {
+    public void onKeyInputEvent(InputEvent.Key event) throws IOException {
         final int keyCode = event.getKey();
         final boolean keyIsDown = event.getAction() == GLFW.GLFW_PRESS;
 

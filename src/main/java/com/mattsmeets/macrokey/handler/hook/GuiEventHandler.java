@@ -12,8 +12,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,7 +39,7 @@ public class GuiEventHandler {
      * @param event The init GUI event.
      */
     @SubscribeEvent
-    public void init(final ScreenEvent.InitScreenEvent event) {
+    public void init(final ScreenEvent.Init event) {
         final Screen gui = event.getScreen();
         if (isNotMainMenu(event.getScreen())) return;
         if (isSwitchButtonDisabled()) return;
@@ -68,7 +68,7 @@ public class GuiEventHandler {
      * @param event The mouse click event.
      */
     @SubscribeEvent(receiveCanceled = true)
-    public void mouseClickedEvent(final ScreenEvent.MouseClickedEvent.Post event) {
+    public void mouseClickedEvent(final ScreenEvent.MouseButtonPressed.Post event) {
         if (isNotMainMenu(event.getScreen())
                 || isSwitchButtonDisabled()
                 || switchButton == null
@@ -85,7 +85,7 @@ public class GuiEventHandler {
      * @param event The draw screen event.
      */
     @SubscribeEvent(receiveCanceled = true)
-    public void render(final ScreenEvent.DrawScreenEvent.Post event) {
+    public void render(final ScreenEvent.Render.Post event) {
         if (isNotMainMenu(event.getScreen())
                 || isSwitchButtonDisabled()
                 || switchButton == null
@@ -97,7 +97,7 @@ public class GuiEventHandler {
         PoseStack posestack = new PoseStack();
         event.getScreen().renderTooltip(
                 posestack,
-                new TranslatableComponent("text.layer.hover.right_click"),
+                Component.translatable("text.layer.hover.right_click"),
                 (int) (mouseHelper.xpos() / 2),
                 (int) (mouseHelper.ypos() / 2));
     }
@@ -114,8 +114,8 @@ public class GuiEventHandler {
         return ModConfig.buttonLayerSwitcherId.get() == -1;
     }
 
-    private static TranslatableComponent getLayerButtonLabel(final LayerInterface layer) {
-        return new TranslatableComponent("text.layer.display",
+    private static MutableComponent getLayerButtonLabel(final LayerInterface layer) {
+        return Component.translatable("text.layer.display",
                 layer == null ? I18n.get("text.layer.master") : layer.getDisplayName()
         );
     }

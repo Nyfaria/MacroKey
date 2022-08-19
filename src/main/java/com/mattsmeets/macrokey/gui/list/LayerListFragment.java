@@ -10,9 +10,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -49,14 +47,14 @@ public class LayerListFragment extends ContainerObjectSelectionList<LayerListFra
         private LayerEntry(final LayerInterface layer) {
             this.layer = layer;
 
-            this.btnEdit = new Button(0, 0, 60, 20, new TranslatableComponent("edit"), Button::onPress) {
+            this.btnEdit = new Button(0, 0, 60, 20, Component.translatable("edit"), Button::onPress) {
                 @Override
                 public void onClick(double mouseX, double mouseY) {
                     minecraft.setScreen(new GuiModifyLayer(guiLayerManagement, layer));
                 }
             };
 
-            this.btnRemove = new Button( 0, 0, 15, 20, new TranslatableComponent("fragment.list.text.remove"), Button::onPress) {
+            this.btnRemove = new Button( 0, 0, 15, 20, Component.translatable("fragment.list.text.remove"), Button::onPress) {
                 @Override
                 public void onClick(double mouseX, double mouseY) {
                     try {

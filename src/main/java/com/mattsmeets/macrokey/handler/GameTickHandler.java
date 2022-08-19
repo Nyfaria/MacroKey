@@ -8,6 +8,7 @@ import com.mattsmeets.macrokey.model.MacroInterface;
 import com.mattsmeets.macrokey.model.lambda.ExecuteOnTickInterface;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -38,6 +39,10 @@ public class GameTickHandler {
         this.executorsToRun = executorsToRun == null ? new HashSet<>() : executorsToRun;
     }
 
+    @SubscribeEvent
+    public void registerKeyBinds(RegisterKeyMappingsEvent event){
+        keyBindings.values().forEach(event::register);
+    }
     @SubscribeEvent
     public void onKeyEvent(MacroActivationEvent event) {
         if (Minecraft.getInstance() != null && Minecraft.getInstance().screen != null) {

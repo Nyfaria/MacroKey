@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +30,7 @@ public class GuiLayerManagement extends Screen {
     private Button btnDone, btnAdd;
 
     GuiLayerManagement(Screen screen) {
-        super(new TextComponent("test"));
+        super(Component.literal("test"));
         this.parentScreen = screen;
     }
 
@@ -53,7 +53,7 @@ public class GuiLayerManagement extends Screen {
         final GuiLayerManagement that = this;
 
         // Cancel button
-        btnDone = this.addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, new TextComponent(this.doneText), Button::onPress) {
+        btnDone = this.addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, Component.literal(this.doneText), Button::onPress) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 Minecraft.getInstance().setScreen(parentScreen);
@@ -61,7 +61,7 @@ public class GuiLayerManagement extends Screen {
         });
 
         // Add layer button
-        btnAdd = this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, new TextComponent(this.addLayerButtonText), Button::onPress) {
+        btnAdd = this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, Component.literal(this.addLayerButtonText), Button::onPress) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 Minecraft.getInstance().setScreen(new GuiModifyLayer(that));

@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyBindingButton extends Button {
@@ -20,7 +19,7 @@ public class KeyBindingButton extends Button {
         if(keyValue == null) {
             keyValue = I18n.get("key.keyboard.unknown");
         }
-        this.setMessage(new TextComponent(isListening ? ChatFormatting.WHITE + "> " + ChatFormatting.YELLOW + keyValue + ChatFormatting.WHITE + " <"
+        this.setMessage(Component.literal(isListening ? ChatFormatting.WHITE + "> " + ChatFormatting.YELLOW + keyValue + ChatFormatting.WHITE + " <"
                 : isMacroKeyAlreadyBind(macro) ? ChatFormatting.GOLD + keyValue
                 : keyValue));
     }

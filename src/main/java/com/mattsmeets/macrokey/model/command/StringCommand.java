@@ -24,7 +24,7 @@ public class StringCommand extends AbstractCommand implements CommandInterface {
         // not possible to execute client-only commands. Tested and its
         // cool that the mod can bind its own GUI to different keys
         // from within the GUI, but this caused some weird issues
-        player.chat(command);
+        player.command(command);
     }
 
     @Override

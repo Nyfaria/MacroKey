@@ -8,7 +8,6 @@ import com.mattsmeets.macrokey.handler.GameTickHandler;
 import com.mattsmeets.macrokey.handler.hook.ClientTickHandler;
 import com.mattsmeets.macrokey.handler.hook.GuiEventHandler;
 import com.mattsmeets.macrokey.handler.hook.KeyInputHandler;
-import com.mattsmeets.macrokey.model.Macro;
 import com.mattsmeets.macrokey.repository.BindingsRepository;
 import com.mattsmeets.macrokey.service.JsonConfig;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -16,7 +15,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -79,9 +77,9 @@ public class MacroKey {
             final KeyMapping managementKey = new KeyMapping(I18n.get("key.macrokey.management.desc"), KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_K), "key.macrokey.category");
             final Map<ModKeyBinding, KeyMapping> keyBindingMap = Collections.singletonMap(ModKeyBinding.OPEN_MANAGEMENT_GUI, managementKey);
 
-            keyBindingMap
-                    .values()
-                    .forEach(ClientRegistry::registerKeyBinding);
+//            keyBindingMap
+//                    .values()
+//                    .forEach(ClientRegistry::registerKeyBinding);
 
             return keyBindingMap;
         }

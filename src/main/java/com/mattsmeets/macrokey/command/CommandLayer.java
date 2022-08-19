@@ -7,7 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 class CommandLayer {
     private static final String LAYER_MASTER_TEXT = I18n.get("text.layer.master");
@@ -38,7 +38,7 @@ class CommandLayer {
         }
 
         context.getSource().sendSuccess(
-                new TextComponent(I18n.get(
+                Component.literal(I18n.get(
                         "command.layer.information",
                         layerDisplayName,
                         countMacroEnabled)
