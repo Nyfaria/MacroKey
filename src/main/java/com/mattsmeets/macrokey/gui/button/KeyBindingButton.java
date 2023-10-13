@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class KeyBindingButton extends Button {
     public KeyBindingButton(int p_93721_, int p_93722_, int p_93723_, int p_93724_, Component p_93725_, OnPress p_93726_) {
-        super(p_93721_, p_93722_, p_93723_, p_93724_, p_93725_, p_93726_);
+        super(p_93721_, p_93722_, p_93723_, p_93724_, p_93725_, p_93726_,Button.DEFAULT_NARRATION);
     }
 
     public void updateDisplayString(final MacroInterface macro, final boolean isListening) {

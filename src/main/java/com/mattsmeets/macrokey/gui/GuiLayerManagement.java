@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mattsmeets.macrokey.gui.list.LayerListFragment;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -35,14 +36,14 @@ public class GuiLayerManagement extends Screen {
     }
 
     @Override
-    public void render(PoseStack ps, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics ps, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(ps);
 
         // Render list
         this.layerListFragment.render(ps, mouseX, mouseY, partialTicks);
 
         // Render title
-        drawCenteredString(ps, this.font, this.screenTitle, this.width / 2, 8, 0xFFFFFF);
+        ps.drawCenteredString(this.font, this.screenTitle, this.width / 2, 8, 0xFFFFFF);
 
         // Render buttons & labels
         super.render(ps, mouseX, mouseY, partialTicks);
@@ -53,20 +54,14 @@ public class GuiLayerManagement extends Screen {
         final GuiLayerManagement that = this;
 
         // Cancel button
-        btnDone = this.addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, Component.literal(this.doneText), Button::onPress) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                Minecraft.getInstance().setScreen(parentScreen);
-            }
-        });
+        btnDone = this.addRenderableWidget(Button.builder( Component.literal(this.doneText), button->{
+            Minecraft.getInstance().setScreen(parentScreen);
+        }).pos(this.width / 2 - 155, this.height - 29).size( 150, 20).build());
 
         // Add layer button
-        btnAdd = this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, Component.literal(this.addLayerButtonText), Button::onPress) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                Minecraft.getInstance().setScreen(new GuiModifyLayer(that));
-            }
-        });
+        btnAdd = this.addRenderableWidget(Button.builder( Component.literal(this.addLayerButtonText), button->{
+            Minecraft.getInstance().setScreen(new GuiModifyLayer(that));
+        }).pos(this.width / 2 - 155 + 160, this.height - 29).size( 150, 20).build());
 
         try {
             this.layerListFragment = new LayerListFragment(this);

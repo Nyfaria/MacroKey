@@ -5,8 +5,8 @@ import com.mattsmeets.macrokey.gui.button.KeyBindingButton;
 import com.mattsmeets.macrokey.model.Macro;
 import com.mattsmeets.macrokey.model.MacroInterface;
 import com.mattsmeets.macrokey.model.command.StringCommand;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -57,7 +57,7 @@ public class GuiModifyMacro extends Screen {
         super.init();
 
         // Add macro button
-        this.addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, Component.literal(saveButtonText), Button::onPress) {
+        this.addRenderableWidget(new Button(Button.builder(Component.literal(saveButtonText), Button::onPress).pos(this.width / 2 - 155, this.height - 29).size(150, 20)) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 if (textFieldCommand.getValue().length() <= 1) {
@@ -77,7 +77,7 @@ public class GuiModifyMacro extends Screen {
         });
 
         // Cancel button
-        this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, Component.literal(cancelText), Button::onPress) {
+        this.addRenderableWidget(new Button(Button.builder(Component.literal(cancelText), Button::onPress).pos(this.width / 2 - 155 + 160, this.height - 29).size(150, 20)) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 Minecraft.getInstance().setScreen(parentScreen);
@@ -85,7 +85,7 @@ public class GuiModifyMacro extends Screen {
         });
 
         String buttonName = GLFW.glfwGetKeyName(macro.getKeyCode(), 0);
-        if(buttonName == null) {
+        if (buttonName == null) {
             buttonName = "";
         }
 
@@ -100,7 +100,7 @@ public class GuiModifyMacro extends Screen {
         this.btnKeyBinding.updateDisplayString(this.macro, false);
 
         // Toggle macro repeat button
-        this.addRenderableWidget(new Button(this.width / 2 - 75, 140, 75, 20, Component.literal(macro.willRepeat() ? enabledText : disabledText), Button::onPress) {
+        this.addRenderableWidget(new Button(Button.builder(Component.literal(macro.willRepeat() ? enabledText : disabledText), Button::onPress).pos(this.width / 2 - 75, 140).size(75, 20)) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 macro.setRepeat(!macro.willRepeat());
@@ -110,7 +110,7 @@ public class GuiModifyMacro extends Screen {
         });
 
         // Toggle macro active button
-        this.addRenderableWidget(new Button(this.width / 2 - 75, 163, 75, 20, Component.literal(macro.isActive() ? enabledText : disabledText), Button::onPress) {
+        this.addRenderableWidget(new Button(Button.builder(Component.literal(macro.isActive() ? enabledText : disabledText), Button::onPress).pos(this.width / 2 - 75, 163).size(75, 20)) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 macro.setActive(!macro.isActive());
@@ -121,32 +121,32 @@ public class GuiModifyMacro extends Screen {
 
         // Command text field
         this.textFieldCommand = new EditBox(this.font, this.width / 2 - 100, 50, 200, 20, Component.literal("test"));
-        this.textFieldCommand.setFocus(true);
+        this.textFieldCommand.setFocused(true);
         this.textFieldCommand.setMaxLength(Integer.MAX_VALUE);
         this.textFieldCommand.setValue(this.isUpdatingMacro ? macro.getCommand().toString() : StringUtils.EMPTY);
         this.addRenderableWidget(this.textFieldCommand);
     }
 
     @Override
-    public void render(PoseStack ps, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics ps, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(ps);
 
         // Render title
-        drawCenteredString(ps, this.font, isUpdatingMacro ? this.editScreenTitleText : this.defaultScreenTitleText, this.width / 2, 8, 0xFFFFFF);
+        ps.drawCenteredString(this.font, isUpdatingMacro ? this.editScreenTitleText : this.defaultScreenTitleText, this.width / 2, 8, 0xFFFFFF);
 
         // Render labels
         // TODO : replace by GuiLabel ?
 
-        drawString(ps, this.font, repeatOnHoldText, this.width / 2 + 50 - Minecraft.getInstance().font.width(repeatOnHoldText) - 140, 145, 0xFFFFFF);
-        drawString(ps, this.font, enableCommandText, this.width / 2 + 50 - Minecraft.getInstance().font.width(enableCommandText) - 140, 168, 0xFFFFFF);
-        drawCenteredString(ps, this.font, commandBoxTitleText, this.width / 2, 37, 0xFFFFFF);
-        drawCenteredString(ps, this.font, keyBoxTitleText, this.width / 2, 90, 0xFFFFFF);
+        ps.drawString(this.font, repeatOnHoldText, this.width / 2 + 50 - Minecraft.getInstance().font.width(repeatOnHoldText) - 140, 145, 0xFFFFFF);
+        ps.drawString(this.font, enableCommandText, this.width / 2 + 50 - Minecraft.getInstance().font.width(enableCommandText) - 140, 168, 0xFFFFFF);
+        ps.drawCenteredString(this.font, commandBoxTitleText, this.width / 2, 37, 0xFFFFFF);
+        ps.drawCenteredString(this.font, keyBoxTitleText, this.width / 2, 90, 0xFFFFFF);
 
         // Render buttons & labels
         super.render(ps, mouseX, mouseY, partialTicks);
 
         // Render text field
-        this.textFieldCommand.renderButton(ps, mouseX, mouseY, partialTicks);
+        this.textFieldCommand.render(ps, mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class GuiModifyMacro extends Screen {
 
         if (this.textFieldCommand.isFocused()) {
             if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-                this.textFieldCommand.setFocus(false);
+                this.textFieldCommand.setFocused(false);
 
                 return true;
             }
@@ -190,7 +190,7 @@ public class GuiModifyMacro extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        this.textFieldCommand.setFocus(false);
+        this.textFieldCommand.setFocused(false);
 
         if (this.changingKey) {
             this.changingKey = false;

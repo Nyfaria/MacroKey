@@ -44,13 +44,13 @@ public class GuiEventHandler {
         if (isNotMainMenu(event.getScreen())) return;
         if (isSwitchButtonDisabled()) return;
 
-        switchButton = new Button(
-                gui.width / 2 + ModConfig.buttonLayerSwitchSetting1.get(),
-                gui.height / 4 + ModConfig.buttonLayerSwitchSetting2.get(),
-                ModConfig.buttonLayerSwitchSetting3.get(),
-                ModConfig.buttonLayerSwitchSetting4.get(),
+        switchButton = new Button(Button.builder(
                 getLayerButtonLabel(modState.getActiveLayer()),
-                Button::onPress
+                Button::onPress).pos(
+                gui.width / 2 + ModConfig.buttonLayerSwitchSetting1.get(),
+                gui.height / 4 + ModConfig.buttonLayerSwitchSetting2.get()).size(
+                ModConfig.buttonLayerSwitchSetting3.get(),
+                ModConfig.buttonLayerSwitchSetting4.get())
         ) {
             @Override
             public void onClick(double mouseX, double mouseY) {
@@ -94,9 +94,8 @@ public class GuiEventHandler {
         }
 
         final MouseHandler mouseHelper = Minecraft.getInstance().mouseHandler;
-        PoseStack posestack = new PoseStack();
-        event.getScreen().renderTooltip(
-                posestack,
+        event.getGuiGraphics().renderTooltip(
+                Minecraft.getInstance().font,
                 Component.translatable("text.layer.hover.right_click"),
                 (int) (mouseHelper.xpos() / 2),
                 (int) (mouseHelper.ypos() / 2));

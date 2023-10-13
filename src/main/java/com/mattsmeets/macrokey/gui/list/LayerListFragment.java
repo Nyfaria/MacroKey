@@ -6,6 +6,7 @@ import com.mattsmeets.macrokey.gui.GuiLayerManagement;
 import com.mattsmeets.macrokey.gui.GuiModifyLayer;
 import com.mattsmeets.macrokey.model.LayerInterface;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -47,45 +48,39 @@ public class LayerListFragment extends ContainerObjectSelectionList<LayerListFra
         private LayerEntry(final LayerInterface layer) {
             this.layer = layer;
 
-            this.btnEdit = new Button(0, 0, 60, 20, Component.translatable("edit"), Button::onPress) {
-                @Override
-                public void onClick(double mouseX, double mouseY) {
-                    minecraft.setScreen(new GuiModifyLayer(guiLayerManagement, layer));
-                }
-            };
+            this.btnEdit = Button.builder(Component.translatable("edit"),button->{
+                minecraft.setScreen(new GuiModifyLayer(guiLayerManagement, layer));
+            }).pos(0, 0).size( 60, 20).build();
 
-            this.btnRemove = new Button( 0, 0, 15, 20, Component.translatable("fragment.list.text.remove"), Button::onPress) {
-                @Override
-                public void onClick(double mouseX, double mouseY) {
-                    try {
-                        if (layer.equals(MacroKey.modState.getActiveLayer())) {
-                            MacroKey.modState.setActiveLayer(null);
-                        }
-
-                        MacroKey.bindingsRepository.deleteLayer(layer, true);
-                    } catch (IOException e) {
-                        LOGGER.error(e);
-                    } finally {
-                        minecraft.setScreen(guiLayerManagement);
+            this.btnRemove = Button.builder(Component.translatable("fragment.list.text.remove"), button->{
+                try {
+                    if (layer.equals(MacroKey.modState.getActiveLayer())) {
+                        MacroKey.modState.setActiveLayer(null);
                     }
+
+                    MacroKey.bindingsRepository.deleteLayer(layer, true);
+                } catch (IOException e) {
+                    LOGGER.error(e);
+                } finally {
+                    minecraft.setScreen(guiLayerManagement);
                 }
-            };
+            }).pos(0, 0).size( 15, 20).build();
         }
 
         @Override
-        public void render(PoseStack ps, int entryWidth, int entryHeight, int mouseX, int mouseY, int c, int b, int a, boolean isSelected, float partialTicks) {
+        public void render(GuiGraphics ps, int entryWidth, int entryHeight, int mouseX, int mouseY, int c, int b, int a, boolean isSelected, float partialTicks) {
             // Render layer name
-            minecraft.font.draw(ps, this.layer.getDisplayName(),
+            ps.drawString(minecraft.font, this.layer.getDisplayName(),
                     mouseX + 90f - minecraft.font.width(this.layer.getDisplayName()),
                     (float)(entryHeight + c / 2 - 9 / 2),
-                    0xFFFFFF);
+                    0xFFFFFF, true);
             // Render buttons
-            this.btnEdit.x = mouseX + 140;
-            this.btnEdit.y = entryHeight;
+            this.btnEdit.setX(mouseX + 140);
+            this.btnEdit.setY(entryHeight);
             this.btnEdit.render(ps, b, a, 0.0f);
 
-            this.btnRemove.x = mouseX + 200;
-            this.btnRemove.y = entryHeight;
+            this.btnRemove.setX(mouseX + 200);
+            this.btnRemove.setY(entryHeight);
             this.btnRemove.render(ps, b, a, 0.0f);
         }
 

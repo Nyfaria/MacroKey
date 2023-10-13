@@ -37,7 +37,7 @@ class CommandLayer {
             countMacroEnabled = activeLayer.getMacros().size();
         }
 
-        context.getSource().sendSuccess(
+        context.getSource().sendSuccess(()->
                 Component.literal(I18n.get(
                         "command.layer.information",
                         layerDisplayName,

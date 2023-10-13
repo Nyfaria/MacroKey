@@ -9,6 +9,7 @@ import com.mattsmeets.macrokey.gui.button.KeyBindingButton;
 import com.mattsmeets.macrokey.model.LayerInterface;
 import com.mattsmeets.macrokey.model.MacroInterface;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -74,7 +75,7 @@ public class MacroListFragment extends ContainerObjectSelectionList<MacroListFra
                 }
             };
 
-            this.btnRemoveKeyBinding = new Button(0, 0, 15, 20, Component.translatable("fragment.list.text.remove"), Button::onPress) {
+            this.btnRemoveKeyBinding = new Button(Button.builder( Component.translatable("fragment.list.text.remove"), Button::onPress).pos(0, 0).size( 15, 20)) {
                 @Override
                 public void onClick(double mouseX, double mouseY) {
                     try {
@@ -87,14 +88,14 @@ public class MacroListFragment extends ContainerObjectSelectionList<MacroListFra
                 }
             };
 
-            this.btnEdit = new Button(0, 0, 30, 20, Component.translatable("edit"), Button::onPress) {
+            this.btnEdit = new Button(Button.builder( Component.translatable("edit"), Button::onPress).pos(0, 0).size(30, 20)) {
                 @Override
                 public void onClick(double mouseX, double mouseY) {
                     minecraft.setScreen(new GuiModifyMacro(guiMacroManagement, macro));
                 }
             };
 
-            this.btnEnabledInLayer = new Button( 0, 0, 75, 20, Component.translatable(MacroKey.bindingsRepository.isMacroInLayer(macro, currentLayer) ? this.enabledText : this.disabledText), Button::onPress) {
+            this.btnEnabledInLayer = new Button(Button.builder( Component.translatable(MacroKey.bindingsRepository.isMacroInLayer(macro, currentLayer) ? this.enabledText : this.disabledText), Button::onPress).pos(0, 0).size(75, 20)) {
                 @Override
                 public void onClick(double mouseX, double mouseY) {
                     if (MacroKey.bindingsRepository.isMacroInLayer(macro, currentLayer)) {
@@ -111,30 +112,30 @@ public class MacroListFragment extends ContainerObjectSelectionList<MacroListFra
         }
 
         @Override
-        public void render(PoseStack ps, int entryWidth, int entryHeight, int mouseX, int mouseY, int c, int b, int a, boolean isSelected, float partialTicks) {
+        public void render(GuiGraphics ps, int entryWidth, int entryHeight, int mouseX, int mouseY, int c, int b, int a, boolean isSelected, float partialTicks) {
             boolean macroKeyCodeModifyFlag = this.macro.equals(guiMacroManagement.macroModify);
 
             // Render macro command
-            minecraft.font.draw(ps, this.macro.getCommand().toString(),
+            ps.drawString(minecraft.font,this.macro.getCommand().toString(),
                     mouseX + 90f - minecraft.font.width(macro.getCommand().toString()),
                     (float)(entryHeight + c / 2 - 9 / 2),
-                    0xFFFFFF);
+                    0xFFFFFF,true);
             if (currentLayer == null) {
-                this.btnEdit.x = mouseX + 170;
-                this.btnEdit.y = entryHeight;
+                this.btnEdit.setX(mouseX + 170);
+                this.btnEdit.setY(entryHeight);
                 this.btnEdit.render(ps, b, a, partialTicks);
 
-                this.btnRemoveKeyBinding.x = mouseX + 200;
-                this.btnRemoveKeyBinding.y = entryHeight;
+                this.btnRemoveKeyBinding.setX(mouseX + 200);
+                this.btnRemoveKeyBinding.setY(entryHeight);
                 this.btnRemoveKeyBinding.render(ps, b, a, partialTicks);
 
-                this.btnChangeKeyBinding.x = mouseX + 95;
-                this.btnChangeKeyBinding.y = entryHeight;
+                this.btnChangeKeyBinding.setX(mouseX + 95);
+                this.btnChangeKeyBinding.setY(entryHeight);
                 this.btnChangeKeyBinding.updateDisplayString(macro, macroKeyCodeModifyFlag);
                 this.btnChangeKeyBinding.render(ps, b, a, partialTicks);
             } else {
-                this.btnEnabledInLayer.x = mouseX + 95;
-                this.btnEnabledInLayer.y = entryHeight;
+                this.btnEnabledInLayer.setX(mouseX + 95);
+                this.btnEnabledInLayer.setY(entryHeight);
                 this.btnEnabledInLayer.render(ps, b, a, partialTicks);
             }
         }

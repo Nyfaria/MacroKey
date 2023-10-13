@@ -5,6 +5,7 @@ import com.mattsmeets.macrokey.model.Layer;
 import com.mattsmeets.macrokey.model.LayerInterface;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -44,7 +45,7 @@ public class GuiModifyLayer extends Screen {
         super.init();
 
         // Add layer button
-        this.addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, Component.literal(this.saveLayerButtonText), Button::onPress) {
+        this.addRenderableWidget(new Button(Button.builder(Component.literal(this.saveLayerButtonText), Button::onPress).pos(this.width / 2 - 155, this.height - 29).size(150, 20)) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 if (textFieldName.getValue().length() <= 1) {
@@ -64,7 +65,7 @@ public class GuiModifyLayer extends Screen {
         });
 
         // Cancel button
-        this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, Component.literal(this.cancelText), Button::onPress) {
+        this.addRenderableWidget(new Button(Button.builder(Component.literal(this.cancelText), Button::onPress).pos(this.width / 2 - 155 + 160, this.height - 29).size(150, 20)) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 Minecraft.getInstance().setScreen(parentScreen);
@@ -72,18 +73,18 @@ public class GuiModifyLayer extends Screen {
         });
 
         this.textFieldName = new EditBox(this.font, this.width / 2 - 100, 50, 200, 20, Component.literal(existing ? result.getDisplayName() : StringUtils.EMPTY));
-        this.textFieldName.setFocus(true);
+        this.textFieldName.setFocused(true);
         this.textFieldName.setMaxLength(20);
         this.textFieldName.setValue(existing ? result.getDisplayName() : StringUtils.EMPTY);
         this.addRenderableWidget(this.textFieldName);
     }
 
     @Override
-    public void render(PoseStack ps, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics ps, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(ps);
 
         // Render title
-        drawCenteredString(ps, this.font, !existing ? this.defaultScreenTitleText : this.editScreenTitleText, this.width / 2, 8, 0xFFFFFF);
+        ps.drawCenteredString(this.font, !existing ? this.defaultScreenTitleText : this.editScreenTitleText, this.width / 2, 8, 0xFFFFFF);
 
         // Render buttons & labels
         super.render(ps, mouseX, mouseY, partialTicks);

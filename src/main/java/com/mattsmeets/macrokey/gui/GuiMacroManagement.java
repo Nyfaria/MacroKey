@@ -7,6 +7,7 @@ import com.mattsmeets.macrokey.model.LayerInterface;
 import com.mattsmeets.macrokey.model.MacroInterface;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
@@ -46,30 +47,22 @@ public class GuiMacroManagement extends Screen {
         final GuiMacroManagement that = this;
 
         // Cancel button
-        this.addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, Component.translatable("gui.done"), Button::onPress) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                Minecraft.getInstance().setScreen(parentScreen);
-            }
-        });
+        this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button->{
+
+            Minecraft.getInstance().setScreen(parentScreen);
+        }).pos(this.width / 2 - 155, this.height - 29).size( 150, 20).build());
 
         // Add macro button
-        this.addRenderableWidget(new Button( this.width / 2 - 155 + 160, this.height - 29, 150, 20, Component.translatable("gui.manage.text.macro.add"), Button::onPress) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                Minecraft.getInstance().setScreen(new GuiModifyMacro(that));
-            }
-        });
+        this.addRenderableWidget(Button.builder(Component.translatable("gui.manage.text.macro.add"),builder->{
+            Minecraft.getInstance().setScreen(new GuiModifyMacro(that));
+        }).pos( this.width / 2 - 155 + 160, this.height - 29).size(150, 20).build());
 
         // Open layer manager button
-        this.addRenderableWidget(new Button( this.width / 2 - 155 + 160, 40, 150, 20, Component.translatable("gui.manage.text.layer.edit"), Button::onPress) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                Minecraft.getInstance().setScreen(new GuiLayerManagement(that));
-            }
-        });
+        this.addRenderableWidget(Button.builder( Component.translatable("gui.manage.text.layer.edit"),button->{
+            Minecraft.getInstance().setScreen(new GuiLayerManagement(that));
+        }).pos(this.width / 2 - 155 + 160, 40).size(150, 20).build());
 
-        this.layerSwitcher = this.addRenderableWidget(new Button( this.width / 2 - 155, 40, 150, 20, Component.translatable("gui.manage.text.layer.switch"), Button::onPress) {
+        this.layerSwitcher = this.addRenderableWidget(new Button(Button.builder( Component.translatable("gui.manage.text.layer.switch"), Button::onPress).pos(this.width / 2 - 155, 40).size(150, 20)) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 if (currentSelectedLayer < layers.size() - 1) {
@@ -87,13 +80,13 @@ public class GuiMacroManagement extends Screen {
     }
 
     @Override
-    public void render(PoseStack ps, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics ps, int mouseX, int mouseY, float partialTicks) {
         // Render macro list
         this.renderBackground(ps);
 //        this.macroListFragment.render(ps, mouseX, mouseY, partialTicks);
 
         // Render Title
-        drawCenteredString(ps, this.font, I18n.get("gui.manage.text.title"), this.width / 2, 8, 0xFFFFFF);
+        ps.drawCenteredString(this.font, I18n.get("gui.manage.text.title"), this.width / 2, 8, 0xFFFFFF);
 
         // Render Buttons & Labels
         for(int i = renderables.size() - 1; i >= 0; i--) {
